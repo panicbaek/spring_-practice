@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyeleaf.org">
+<head>
+<th:block th:insert="~{fragments/common :: head('인덱스 페이지')}"></th:block>
+<title>Insert title here</title>
+</head>
+<body>
+	<nav th:replace="~{fragments/common :: header}"></nav>
+	
+	
+	<h1>인덱스 페이지</h1>
+	
+	<div th:replace="~{fragments/common :: footer}"></div>
+	<div th:insert="~{fragments/common :: scripts}"></div>
+</body>
+</html>
