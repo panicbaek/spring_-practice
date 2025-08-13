@@ -7,8 +7,21 @@
 <body>
 	<nav th:replace="~{fragments/common :: header}"></nav>
 	
-	
-	<h1>인덱스 페이지</h1>
+	<h1>게시글 목록</h1>
+	 <div class="container mt-3">
+	 
+	 <th:block th:if="${!postList.isEmpty()}">
+	 <!-- th:each 는 향상된 for문임 -->
+	    <div class="card" th:each="post : ${postList}">
+	      <div class="card-body">
+	        <h4 class="card-title" th:text="${post.title}">게시물제목</h4>
+	        <a href="#" class="btn btn-secondary">상세보기</a>
+	      </div>
+	    </div>
+	    
+	   </th:block>
+	  </div>
+	  
 	
 	<div th:replace="~{fragments/common :: footer}"></div>
 	<div th:insert="~{fragments/common :: scripts}"></div>

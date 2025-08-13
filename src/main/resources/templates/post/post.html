@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyeleaf.org">
+<head>
+<th:block th:insert="~{fragments/common :: head('글작성')}"></th:block>
+<title>Insert title here</title>
+</head>
+<body>
+	<nav th:replace="~{fragments/common :: header}"></nav>
+	  <div class="container mt-3">
+	    <form>
+	      <div class="mb-3 mt-3">
+	        <label for="title" class="form-label">Title:</label> <input
+	          type="text" class="form-control" id="title"
+	          placeholder="Enter title" name="title">
+	      </div>
+	      <div class="mb-3">
+	        <label for="content" class="form-label">Content:</label>
+	        <textarea class="form-control" id="content" rows="5"></textarea>
+	      </div>
+	      <button id="btn-insert" type="submit" class="btn btn-primary">게시물 등록</button>
+	    </form>
+	  </div>
+	
+	<div th:replace="~{fragments/common :: footer}"></div>
+	<div th:insert="~{fragments/common :: scripts}"></div>
+	<script src="/js/post.js"></script>
+</body>
+</html>
