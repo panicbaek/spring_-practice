@@ -12,14 +12,75 @@
 	 
 	 <th:block th:if="${!postList.isEmpty()}">
 	 <!-- th:each 는 향상된 for문임 -->
-	    <div class="card" th:each="post : ${postList}">
+	    <div class="card" th:each="post : ${postList.content}">
 	      <div class="card-body">
 	        <h4 class="card-title" th:text="${post.title}">게시물제목</h4>
-	        <a href="#" class="btn btn-secondary">상세보기</a>
+	        <a th:href="@{|/post/${post.id}|}" class="btn btn-secondary">상세보기</a>
 	      </div>
 	    </div>
 	    
 	   </th:block>
+		   
+		   <!-- 버튼 구간 -->
+		 <ul class="pagination justify-content-between">
+	      <li class="page-item" th:classappend ="${postList.first} ? 'disabled'"> <!-- calssappend 는 클래스 추가한다는 뜻 -->
+	        <!-- || 는 ``같은 역할을함  -->
+	        <a class="page-link" th:href="@{|?page=${postList.number-1}|}">이전</a>
+	      </li>
+	      <li class="page-item" th:classappend = "${postList.last} ? 'disabled'">
+	        <a class="page-link" th:href="@{|?page=${postList.number+1}|}">다음</a>
+	      </li>
+	    </ul>
+	    
+	    <!-- 페이지 수 나타내는 구간 -->
+	    <br>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          
+          <!-- 페이지 넘김 버튼 구간 -->
+          <li class="page-item" th:classappend="${i == postList.number} ? 'active' " 
+          	th:each="i : ${#numbers.sequence(0, postList.totalPages-1)}">
+          <a class="page-link" th:href="@{|?page=${i}|}" th:text="${i+1}">1</a>
+          </li>
+          
+          <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      	    <!-- 페이지 수 나타내는 구간 -->
+	    <br>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" th:classappend="${pageDTO.prev} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{|?page=${pageDTO.startPage - 2}|}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          
+          <!-- 페이지 넘김 버튼 구간 -->
+          <li class="page-item" 
+          	th:each="i : ${#numbers.sequence(pageDTO.startPage, pageDTO.endPage)}"
+          	th:classappend="${i == postList.number + 1} ? 'active' " >
+          <a class="page-link" th:href="@{|?page=${i-1}|}" th:text="${i}">1</a>
+          </li>
+          
+          <li class="page-item" th:classappend="${pageDTO.next} ? '' : 'disabled'">
+            <a class="page-link" th:href="@{|?page=${pageDTO.endPage}|}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
 	  </div>
 	  
 	
