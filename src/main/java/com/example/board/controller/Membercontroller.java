@@ -1,9 +1,15 @@
 package com.example.board.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +21,11 @@ import org.springframework.web.util.HttpSessionMutexListener;
 
 import com.example.board.domain.ResponseDTO;
 import com.example.board.domain.User;
+import com.example.board.domain.UserDTO;
 import com.example.board.service.MemberService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class Membercontroller {
@@ -25,6 +33,8 @@ public class Membercontroller {
 	// 의존성 주입
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private ModelMapper modelMapper;
 	
 	// 요청받으면 회원가입 페이지로 넘어가게 만드는 클래스
 	@GetMapping("/auth/join")
@@ -35,8 +45,21 @@ public class Membercontroller {
 	// 프론트에서 데이터를 받아서 저장함
 	// 첫번째 방법
 	@PostMapping("/auth/join")
-	@ResponseBody
-	public ResponseDTO<?> insertUser(@RequestBody User user) {
+	@ResponseBody					// Valid는 유효성 검사 시켜라 하는 어노테이션임 BindingResult 는 유효성 검사를 담는 객체임
+	public ResponseDTO<?> insertUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+		
+		// 유효성 검사에 부적합했을때 처리하는 코드
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errorMap = new HashMap<>();
+			
+			for(FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+			}
+			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+		}
+		
+		User user = modelMapper.map(userDTO, User.class);
+		
 		User findUser = memberService.getUser(user.getUsername());
 		
 		if(findUser.getUsername() == null ) {
