@@ -22,6 +22,7 @@ import com.example.board.repository.UserRepository;
 public class UserController {
 
     private final BoardApplication boardApplication;
+    
 	
 	// 첫번째 방법
 	@Autowired

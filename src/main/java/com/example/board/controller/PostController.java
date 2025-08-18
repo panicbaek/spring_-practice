@@ -2,9 +2,13 @@ package com.example.board.controller;
 import com.example.board.repository.PostRepository;
 import com.example.board.service.PostService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +17,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.board.BoardApplication;
 import com.example.board.domain.PageDTO;
 import com.example.board.domain.Post;
+import com.example.board.domain.PostDTO;
 import com.example.board.domain.ResponseDTO;
 import com.example.board.domain.User;
 
@@ -35,6 +42,8 @@ public class PostController {
 
     @Autowired
     private PostService postseService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     PostController(PostRepository postRepository, PostService postService, BoardApplication boardApplication) {
         this.postService = postService;
@@ -48,7 +57,20 @@ public class PostController {
 	
 	@PostMapping("/post")
 	@ResponseBody
-	public ResponseDTO<?> insertPost(@RequestBody Post post, HttpSession session) {
+	public ResponseDTO<?> insertPost(@Valid @RequestBody PostDTO postDTO, BindingResult bindingResult, HttpSession session) {
+		
+		// 유효성 검사에 처리하는 코드
+		if(bindingResult.hasErrors()) {
+			Map<String, String> errorMap = new HashMap<>();
+			
+			for(FieldError error : bindingResult.getFieldErrors()) {
+				errorMap.put(error.getField(), error.getDefaultMessage());
+			}
+			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+		}
+		
+		Post post = modelMapper.map(postDTO, Post.class);
+		
 		User writer = (User)session.getAttribute("principal"); // 세션정보는 객체이기 때문에 (User)로 형변환을 해야 변수에 담을 수 있음
 		postService.insertPost(post, writer);
 		

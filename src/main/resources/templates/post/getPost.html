@@ -21,12 +21,66 @@
 	    </div>
 	    <hr>
 	    <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
+	    
+	    <th:block th:if="${post.user.username == session.principal.username}">
 	    <a th:href="@{|/post/update/${post.id}|}" class="btn btn-warning">수정하기</a>
 	    <button id="btn-delete" class="btn btn-danger">삭제하기</button>
+	    </th:block>
+	    
+	    <!-- 댓글창 영역 -->
+	          <br> <br>
+      <div class="container mt-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th width="75%">내용</th>
+              <th width="10%">작성자</th>
+              <th width="15%">삭제</th>
+            </tr>
+          </thead>
+          <tbody>
+          <th:block th:each="reply : ${post.replyList}">
+              <tr >
+                <td th:text="${reply.content}">댓글내용들어감</td>
+                <td th:text="${reply.user.username}">댓글작성자들어감</td>
+                <td>
+                	<th:block th:if="${reply.user.username == session.principal.username}">
+                	<button class="btn btn-danger btn-delete-reply" th:data-reply-id="${reply.id}">삭제</button></td>
+                	</th:blcok>
+              </tr>
+           </th:block>
+          </tbody>
+        </table>
+      </div>
+	    
+	    <!-- 댓글 작성 영역 -->
+	          <br>
+	    <br>
+	    <div class="container mt-3">
+	      <input type="hidden" id="postId" th:value="${post.id}">
+	      <table class="table">
+	        <thead>
+	          <tr>
+	            <th><h4>댓글 등록</h4></th>
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <tr align="right">
+	            <td>
+	              <textarea id="reply-content" rows="1" class="form-control"></textarea>
+	              <button id="btn-save-reply" class="btn btn-secondary mt-3">댓글등록</button>
+	            </td>
+	          </tr>
+	        </tbody>
+	      </table>
+	    </div>
+	    
+	    
 	  </div>	
 	
 	<div th:replace="~{fragments/common :: footer}"></div>
 	<div th:insert="~{fragments/common :: scripts}"></div>
 	<script src="/js/post.js"></script>
+	<script src="/js/reply.js"></script>
 </body>
 </html>

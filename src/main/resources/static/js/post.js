@@ -53,9 +53,21 @@ const postObject = {
 			body: JSON.stringify(post)
 		}).then(response => response.json())
 		.then(result => {
-			alert(result.data);
 			
-			window.location.href="/";
+			if(result.status == 200) {
+				alert(result.data);
+				
+				window.location.href="/";
+			} else {
+				let msg = "";
+
+				for(let key in result.data) {
+					msg += result.data[key] + '\n';
+				}
+				
+				alert(msg);
+			}
+
 		}).catch(error => {
 			console.log(error);
 		})

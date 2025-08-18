@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import jakarta.persistence.CascadeType;
+import jakarta.annotation.Generated;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -13,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
@@ -21,35 +20,31 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+@NoArgsConstructor
+@Entity
+public class Reply {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // 고유키
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(nullable = false, length = 100)
-	private String title;
-	
-	@Lob // 대용량 데이터 저장할때 쓰이는 (barchar 보다 용량이 클때)
-	@Column(nullable = false)
+	@Column(nullable = false, length = 200)
 	private String content;
 	
 	@CreationTimestamp
 	private Timestamp createDate;
 	
-	private int cnt;
-	
-	@ManyToOne(fetch = FetchType.EAGER) //지금작성하는 클래스의 테이블을 기준으로 만듬
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userid")
 	private User user;
 	
-	@OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	// 양방향 설정할때에는 mappedBy 를 설정해놔야함 
-	@OrderBy("id desc")
-	private List<Reply> replyList;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "postid")
+	private Post post;
+	
+	
 	
 }

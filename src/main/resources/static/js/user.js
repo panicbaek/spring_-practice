@@ -45,12 +45,31 @@ const userObject = {
 			body : JSON.stringify(user)
 		}) .then(response => response.json())
 		.then(json => {
-			alert(json.data);
 			
-			if(json.status == 400)
-				return window.location.href = "/auth/join";
+			if(json.status == 200) {
+				alert(json.data);
+				window.location.href = "/";
+			} else {
+				let msg = "";
+				let errors = json.data;
+				
+				// 중복아이디 처리
+				if(typeof errors == 'string')
+					msg = errors;
+				
+				// 회원가입중 입력 유효성 검사
+				if(errors.username != null) 
+					msg += errors.username + '\n'
+				if(errors.password != null)
+					msg += errors.password + '\n'
+				if(errors.email != null)
+					msg += errors.email
+				
+				alert(msg);
+			}
 			
-			window.location.href = "/";
+
+			
 		}).catch(error => {
 			console.error('회원가입 중 오류 발생', error);
 		})
