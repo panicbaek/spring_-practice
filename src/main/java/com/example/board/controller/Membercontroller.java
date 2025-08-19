@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
-public class Membercontroller {
+public class MemberController {
 	
 	// 의존성 주입
 	@Autowired
@@ -48,15 +48,15 @@ public class Membercontroller {
 	@ResponseBody					// Valid는 유효성 검사 시켜라 하는 어노테이션임 BindingResult 는 유효성 검사를 담는 객체임
 	public ResponseDTO<?> insertUser(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
 		
-		// 유효성 검사에 부적합했을때 처리하는 코드
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errorMap = new HashMap<>();
-			
-			for(FieldError error : bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-			}
-			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
-		}
+//		// 유효성 검사에 부적합했을때 처리하는 코드
+//		if(bindingResult.hasErrors()) {
+//			Map<String, String> errorMap = new HashMap<>();
+//			
+//			for(FieldError error : bindingResult.getFieldErrors()) {
+//				errorMap.put(error.getField(), error.getDefaultMessage());
+//			}
+//			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+//		}
 		
 		User user = modelMapper.map(userDTO, User.class);
 		

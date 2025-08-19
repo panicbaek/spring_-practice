@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyeleaf.org">
+<head>
+<th:block th:insert="~{fragments/common :: head('인덱스 페이지')}"></th:block>
+<title>Insert title here</title>
+</head>
+<body>
+	<nav th:replace="~{fragments/common :: header}"></nav>
+	
+	<!-- 실제 작업할 영역 -->
+	<div class="container py-5">
+    <!-- 제목과 등록 버튼 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="mb-0">이미지 목록</h2>
+      <button class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#uploadModal">
+        <i class="bi bi-upload"></i> 이미지 등록
+      </button>
+    </div>
+
+    <!-- 이미지 카드 목록 -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
+      <!-- 더미 데이터 -->
+      <th:block th:each="img : ${images}">
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img th:src="${img.url}"
+            class="card-img-top" th:alt="${img.originalFilename}">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${img.originalFilename}">Image 1</h5>
+            <p class="card-text text-muted" th:text="${img.user}">ㅎㅎㅎㅎㅎ</p>
+          </div>
+        </div>
+      </div>
+        </th:block>
+</div>      
+      
+      
+  <!-- 업로드 모달 -->
+  <div class="modal fade" id="uploadModal" tabindex="-1"
+    aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="uploadForm" enctype="multipart/form-data">
+          <div class="modal-header">
+            <h5 class="modal-title" id="uploadModalLabel">이미지 등록</h5>
+            <button type="button" class="btn-close"
+              data-bs-dismiss="modal" aria-label="닫기"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="fileInput" class="form-label">이미지 파일 선택</label> 
+              <input class="form-control" type="file"
+                id="fileInput" name="file" accept="image/*" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">업로드</button>
+            <button type="button" class="btn btn-secondary"
+              data-bs-dismiss="modal">취소</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+	
+	<div th:replace="~{fragments/common :: footer}"></div>
+	<div th:insert="~{fragments/common :: scripts}"></div>
+	<script src="/js/upload.js"></script>
+</body>
+</html>

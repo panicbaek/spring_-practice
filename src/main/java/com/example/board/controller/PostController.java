@@ -59,15 +59,15 @@ public class PostController {
 	@ResponseBody
 	public ResponseDTO<?> insertPost(@Valid @RequestBody PostDTO postDTO, BindingResult bindingResult, HttpSession session) {
 		
-		// 유효성 검사에 처리하는 코드
-		if(bindingResult.hasErrors()) {
-			Map<String, String> errorMap = new HashMap<>();
-			
-			for(FieldError error : bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(), error.getDefaultMessage());
-			}
-			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
-		}
+//		// 유효성 검사에 처리하는 코드
+//		if(bindingResult.hasErrors()) {
+//			Map<String, String> errorMap = new HashMap<>();
+//			
+//			for(FieldError error : bindingResult.getFieldErrors()) {
+//				errorMap.put(error.getField(), error.getDefaultMessage());
+//			}
+//			return new ResponseDTO<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+//		}
 		
 		Post post = modelMapper.map(postDTO, Post.class);
 		
